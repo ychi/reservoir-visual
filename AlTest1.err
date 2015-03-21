@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "parse.py", line 28, in <module>
+    write_json('data/data.json', data)
+  File "parse.py", line 15, in write_json
+    with open(file_name, 'w') as output_file:
+IOError: [Errno 13] Permission denied: 'data/data.json'
