@@ -25,4 +25,4 @@ for page, url in pages.iteritems():
     percentage = td.string[:-1]
     data[page] = percentage
 
-write_json('data/data.json', data)
+write_json(base_dir + 'data/data.json', data)
