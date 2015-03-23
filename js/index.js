@@ -1,11 +1,13 @@
 (function() {
-  
-  d3.json("../data/data.json", function(error, data) {
+
+  d3.json("http://rawgit.com/chihsuan/reservoir-visual/data/data/data.json", function(error, data) {
     configs = {};
 
     for (id in data) {
-       var percentage = data[id];
-       var number = parseFloat(data[id]);
+       var percentage = data[id]['percentage'];
+       var number = parseFloat(data[id]['percentage']);
+       var updateAt = data[id]['updateAt'];
+       var volumn = data[id]['volumn'];
        configs[id] = liquidFillGaugeDefaultSettings();
        configs[id].waveAnimate = true;
        configs[id].waveAnimateTime = setAnimateTime(number);
@@ -13,6 +15,8 @@
        configs[id].waveHeight = 0.05;
        configs[id].waveCount = setWavaCount(number);
        setColor(configs[id], number);
+       $('#'+id).siblings('.updateAt').html('更新時間：'+updateAt);
+       $('#'+id).siblings('.volumn').children('h6').text(volumn+'萬立方公尺');
        loadLiquidFillGauge(id, percentage, configs[id]);
     }
 
@@ -21,13 +25,13 @@
         config.circleColor = "#FF7777";
         config.textColor = "#FF4444";
         config.waveTextColor = "#FFAAAA";
-        config.waveColor = "#FFDDDD"; 
+        config.waveColor = "#FFDDDD";
       }
       else if (percentage < 50) {
         config.circleColor = "rgb(255, 160, 119)";
         config.textColor = "rgb(255, 160, 119)";
         config.waveTextColor = "rgb(255, 160, 119)";
-        config.waveColor = "rgba(245, 151, 111, 0.48)"; 
+        config.waveColor = "rgba(245, 151, 111, 0.48)";
       }
     }
 
