@@ -3,26 +3,53 @@
   d3.json("../data/data.json", function(error, data) {
     configs = {};
     for (reservoirName in data) {
-       var percentage = data[reservoirName]['percentage'];
-       var number = parseFloat(data[reservoirName]['percentage']);
+       var percentage = data[reservoirName]['percentage'].toFixed(1);
        var updateAt = data[reservoirName]['updateAt'];
        var volumn = data[reservoirName]['volumn'];
-       var id = data[reservoirName]['id']
-       if (isNaN(number)) {
+       var id = data[reservoirName]['id'];
+       var netFlow = -parseFloat(data[reservoirName]['daliyNetflow']).toFixed(1);
+       var netPercentageVar;
+       
+       if (isNaN(percentage)) {
          $('#'+id).parent().remove();
          continue;
        }
-
+      
+       if (isNaN(netFlow)) {
+          $('#'+id).siblings('.state')
+                  .children('h6')
+                  .text('昨日水量狀態：待更新');
+          $('#'+id).siblings('.state').removeClass();
+       }
+       else if (netFlow < 0) {
+         netPercentageVar = ((-netFlow) / 
+             parseFloat(data[reservoirName]['baseAvailable'])*100).toFixed(2)
+         
+         $('#'+id).siblings('.state')
+                  .children('h6')
+                  .text('昨日水量下降：'+ netPercentageVar + '%');
+         $('#'+id).siblings('.state').addClass('red');
+       }
+       else {
+         netPercentageVar = ((netFlow) / 
+             parseFloat(data[reservoirName]['baseAvailable'])*100).toFixed(2)
+         
+         $('#'+id).siblings('.state')
+                  .children('h6')
+                  .text('昨日水量上升：'+ netPercentageVar + '%');
+         $('#'+id).siblings('.state').addClass('blue');
+       }
+       
        configs[reservoirName] = liquidFillGaugeDefaultSettings();
        configs[reservoirName].waveAnimate = true;
-       configs[reservoirName].waveAnimateTime = setAnimateTime(number);
+       configs[reservoirName].waveAnimateTime = setAnimateTime(percentage);
        configs[reservoirName].waveOffset = 0.3;
        configs[reservoirName].waveHeight = 0.05;
-       configs[reservoirName].waveCount = setWavaCount(number);
-       setColor(configs[reservoirName], number);
-       //$('#'+id).siblings('.name').text(reservoirName);
+       configs[reservoirName].waveCount = setWavaCount(percentage);
+       setColor(configs[reservoirName], percentage);
+
        $('#'+id).siblings('.updateAt').html('更新時間：'+updateAt);
-       $('#'+id).siblings('.volumn').children('h6').text(volumn+'萬立方公尺');
+       $('#'+id).siblings('.volumn').children('h6').text('有效蓄水量：'+volumn+'萬立方公尺');
        loadLiquidFillGauge(id, percentage, configs[reservoirName]);
     }
 
