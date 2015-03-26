@@ -4,8 +4,7 @@ import json
 import os
 import urllib2
 import sys
-from datetime import date
-
+import datetime
 
 base_dir = os.path.dirname(os.path.abspath(__file__))
 os.chdir(base_dir)
@@ -18,9 +17,9 @@ def write_json(file_name, content):
     with open(file_name, 'w') as output_file:
         json.dump(content, output_file, indent=4)
 
-today = date.today()
-api = 'http://127.0.0.1:10080/'
+#api = 'http://127.0.0.1:10080/'
 api_today = 'http://127.0.0.1:10080/today'
+api = 'http://128.199.223.114:10080/'
 
 data = read_json('data/data.json')
 
@@ -67,4 +66,6 @@ for name, reservoir in data.iteritems():
             else:
                 reservoir['percentage'] = float(reservoir['percentage'])
 
-write_json('data/data-' + str(today) + '.json', data)
+now = datetime.datetime.now()
+date = str(now).split(' ')[0].replace('-', '')
+write_json('data/data' + date + str(now.hour) + '.json', data)
