@@ -21,7 +21,7 @@ def write_json(file_name, content):
 api_today = 'http://127.0.0.1:10080/today'
 api = 'http://128.199.223.114:10080/'
 
-data = read_json('data/data.json')
+data = read_json('/home/ice479/reservoir-visual-data/data/data.json')
 
 response = urllib2.urlopen(api);
 try:
@@ -33,7 +33,7 @@ except e:
 for name, reservoir in data.iteritems():
     for reservoir_new in new_data['data']:
         if name == reservoir_new['reservoirName']:
-            print name, reservoir['id']
+            #print name, reservoir['id']
             reservoir['daliyInflow'] = reservoir_new['daliyInflow']
             reservoir['daliyOverflow'] = reservoir_new['daliyOverflow']
             if reservoir_new['baseAvailable'] != '--':
@@ -54,7 +54,7 @@ except e:
 for name, reservoir in data.iteritems():
     for reservoir_new in new_data['data']:
         if name == reservoir_new['reservoirName']:
-            print name, reservoir['id'], reservoir_new['immediateTime']
+            #print name, reservoir['id'], reservoir_new['immediateTime']
             if reservoir_new['immediateStorage'] != '--':
                 reservoir['updateAt'] = reservoir_new['immediateTime']
                 reservoir['volumn'] = reservoir_new['immediateStorage'].replace(',', '')
@@ -70,5 +70,5 @@ for name, reservoir in data.iteritems():
 
 now = datetime.datetime.now()
 date = str(now).split(' ')[0].replace('-', '')
-write_json('data/data' + date + str(now.hour) + '.json', data)
-write_json('data/data.json', data)
+write_json('/home/ice479/reservoir-visual-data/data/data' + date + str(now.hour) + '.json', data)
+write_json('/home/ice479/reservoir-visual-data/data/data.json', data)
