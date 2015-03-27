@@ -61,8 +61,10 @@ for name, reservoir in data.iteritems():
                 if reservoir_new['immediatePercentage'] == '--':
                     reservoir['percentage'] = (float(reservoir['volumn']) / \
                             float(reservoir['baseAvailable'])) * 100
-                else:
+                elif len(reservoir_new['immediatePercentage']) == 6:
                     reservoir['percentage'] = float(reservoir_new['immediatePercentage'][:-2])
+                else:
+                    reservoir['percentage'] = float(reservoir_new['immediatePercentage'][:-1])
             else:
                 reservoir['percentage'] = float(reservoir['percentage'])
 
